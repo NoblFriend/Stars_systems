@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+.vs/Stars_systems/v15/.suo
+*.db
+.vs/Stars_systems/v15/Browse.VC.opendb
+*.ipch
+*.log
+*.ilk
+*.pdb
+*.tlog
+*.idb
+*.aps
+*.filters
+*.user
