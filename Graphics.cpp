@@ -50,6 +50,16 @@ void Graphics::clear()
 	txSetFillColor(c);
 }
 
+double Graphics::sleep(int t)
+{
+	return txSleep(t);
+}
+
+double Graphics::getFPS()
+{
+	return txGetFPS();
+}
+
 void Graphics::drawPoint(Point p, double thickness, COLORREF color)
 {
 	txSetColor (color, thickness);
@@ -80,14 +90,15 @@ void Graphics::drawRectangle(Point p1, Point p2, double thickness, COLORREF colo
 {
 	txSetColor (color, thickness);
 	int a = txGetExtentY();
-	txLine (p1.x, txGetExtentY() - p1.y, p1.x, txGetExtentY() - p2.y);
-	txLine (p1.x, txGetExtentY() - p2.y, p2.x, txGetExtentY() - p2.y);
-	txLine (p2.x, txGetExtentY() - p2.y, p2.x, txGetExtentY() - p1.y);
-	txLine (p2.x, txGetExtentY() - p1.y, p1.x, txGetExtentY() - p1.y);
+	txLine (p1.x, a - p1.y, p1.x, a - p2.y);
+	txLine (p1.x, a - p2.y, p2.x, a - p2.y);
+	txLine (p2.x, a - p2.y, p2.x, a - p1.y);
+	txLine (p2.x, a - p1.y, p1.x, a - p1.y);
 }
 
-void Graphics::drawText(Point p, std::string text)
+void Graphics::drawText(Point p, std::string text, COLORREF color)
 {
+	txSetColor (color);
 	txTextOut(p.x, txGetExtentY() - p.y, text.c_str());
 }
 
@@ -136,5 +147,13 @@ Point operator*(const Point & p1, const Point & p2)
 	Point p;
 	p.x = p1.x * p2.x;
 	p.y = p1.y * p2.y;
+	return p;
+}
+
+Point operator*(const Point & p1, double d)
+{
+	Point p;
+	p.x = p1.x*d;
+	p.y = p1.y*d;
 	return p;
 }

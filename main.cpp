@@ -3,37 +3,56 @@
 #include <Windows.h>
 #include <stdlib.h>
 #include <ctime>
+#include "Consts.h"
+#define _USE_MATH_DEFINES 
+#include <math.h>
 
 int main()
 {
+	Point windowSize = { GetSystemMetrics(SM_CXSCREEN)*0.85, GetSystemMetrics(SM_CYSCREEN)*0.85 };
 	srand(int(time(NULL)));
-	Graphics::get()->Create({ 1400, 700 });
-	Universe univ (2);
-	//Solid s1 (50000.0, { 0, 0 }, { 600,300 }, Graphics::get()->colorRGB(255, 0,0));
-	//Solid s2 (50000, { -50, 0 }, { 600,200 }, Graphics::get()->colorRGB(0, 0, 255));
-	Solid s3 (210000.0, { 0, 0 }, { 600,400 }, Graphics::get()->colorRGB(255, 0, 0));
-	Solid s2 (1.0, { 22, 0 }, { 600,110 }, Graphics::get()->colorRGB(0, 0, 255));
+	Graphics::get()->Create(windowSize);
+	Universe universe (6, windowSize.y/(AU*11));
+	Solid sun		({ 0.0, 0.0 },	   1.989E30,     1*SR/20, { 0,0 },		 0,		            RGB(255, 255,   0), "");
+	Solid mercury	({ 0.38*AU, 0.0 }, 0.055*EM, 2440E3,  { 0,47.87E3 }, 2*M_PI /(0.241*Y), RGB(255,   0, 120), "");
+	Solid venus		({ 0.72*AU, 0.0 }, 0.815*EM, 6052E3,  { 0,35.02E3 }, 2*M_PI /(0.615*Y), RGB(  0, 255, 255), "");
+	Solid earth		({ 1.00*AU, 0.0 }, 1.0*EM,   1*ER,	  { 0,29.76E3 }, 2*M_PI /(Y),	    RGB(  0, 255,   0), "");
+	Solid mars		({ 1.52*AU, 0.0 }, 0.107*EM, 3397E3,  { 0,24.13E3 }, 2*M_PI /(1.88*Y),  RGB(255,   0,   0), "");
+	Solid jupiter	({ 5.20*AU, 0.0 }, 317.8*EM, 71490E3, { 0,13.07E3 }, 2*M_PI /(11.85*Y), RGB(255, 100, 100), "");
+	universe.add(sun);
+	universe.add(mercury);
+	universe.add(venus);
+	universe.add(earth);
+	universe.add(mars);
+	universe.add(jupiter);
 
-	Solid s1 (800.0, { 35, 0 }, { 600,120 }, Graphics::get()->colorRGB(0, 255, 0));
-	Solid s4 (1000.0, { 47, 0 }, { 600,240 }, Graphics::get()->colorRGB(0, 255, 0));
-	univ.add(s1);
-	univ.add(s2);
-	univ.add(s3);
-	univ.add(s4);
-	/*for (int i = 0; i < 200; i++)
+
+	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
-		l_double m = 1000;
-		l_double v_x = (rand() % 10 * rand() % 10 - 70)/4;
-		l_double v_y = (rand() % 10 * rand() % 10 - 70)/4;
-		Solid s (m, { v_x, v_y }, { rand() % 1100 + 100, rand() % 400 + 100 }, Graphics::get()->colorRGB(0, 255, 0));
-		univ.add (s);
-	}*/
-	for (int i = 1; i >0; i++)
-	{
-		univ.calculate(0.04);
-		univ.draw();
-		Sleep(0);
+		universe.draw(windowSize*0.5, true);
+		double FPS = Graphics::get()->getFPS();
+		double t_scale = (FPS == 0) ? 0 : 1 / (FPS*10);
+		int count = 100;
+		for (int i = 0; i < count; i++)
+		{
+			universe.calculate(Y*t_scale/count);
+		}
 	}
-	std::cout << "End";
+	/*std::vector<double> r(universe.solids_.size());
+
+	for (size_t i = 0; i < universe.solids_.size(); i++)
+	{
+		r[i] = universe.solids_[i].coord_.x_;
+	}
+
+	for (double t = 0; !GetAsyncKeyState(VK_ESCAPE); t+=M_PI*1E7*Graphics::get()->sleep(10)/1000)
+	{
+		for (size_t i = 0; i < universe.solids_.size(); i++)
+		{
+			universe.solids_[i].coord_ = { cos(t* universe.solids_[i].omega_)*r[i], sin(t* universe.solids_[i].omega_)*r[i]};
+		}
+		universe.draw(windowSize*0.5);
+	}*/
+	std::cout << "Just relax, all is good!";
 	return 0;
 }

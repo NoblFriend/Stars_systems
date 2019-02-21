@@ -15,6 +15,7 @@ Point operator + ( const Point &p1, const Point &p2 );
 Point operator - ( const Point &p1, const Point &p2 );
 Point operator / ( const Point &p1, const Point &p2 );
 Point operator * ( const Point &p1, const Point &p2 );
+Point operator * (const Point &p1, double d);
 
 class Graphics
 {
@@ -27,10 +28,12 @@ public:
 	static void begin();
 	static void end();
 	static void clear();
+	static double sleep(int t);
+	static double getFPS ();
 	static void drawPoint(Point p, double thickness, COLORREF color);
 	static void drawLine(Point p1, Point p2, double thickness, COLORREF color);
 	static void drawRectangle(Point p1, Point p2, double thickness, COLORREF color);
-	static void drawText(Point p, std::string text);
+	static void drawText(Point p, std::string text, COLORREF color);
 	COLORREF lowerBrightness (COLORREF color, double k);
 	COLORREF colorRGB (double r, double g, double b);
    ~Graphics ();

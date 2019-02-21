@@ -5,10 +5,6 @@ Vector2::Vector2 (l_double x, l_double y)
 		y_(y)
 {}
 
-Vector2::Vector2 (int x, int y)
-	:	x_(x),
-		y_(y)
-{}
 
 Vector2::Vector2 ()
 	:	x_(0),

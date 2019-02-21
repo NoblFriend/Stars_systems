@@ -3,30 +3,34 @@
 #include <vector>
 #include "Vector2.h"
 #include "Graphics.h"
+#include "Consts.h"
 
 struct Solid
 {
-	l_double m_;
-	Vector2 v_;
 	Vector2 coord_;
+	l_double m_;
+	l_double r_;
+	Vector2 v_;
+	l_double omega_;
 	COLORREF color_;
+	const char* name_ = "";
 
-	Solid (l_double m, Vector2 v, Vector2 coord, COLORREF color);
+	Solid (Vector2 coord, l_double m, l_double r, Vector2 v, l_double omega, COLORREF color, const char* name);
 	Solid();
 	void calculate_v (Vector2 a, l_double t_scale);
 	void calculate_coord (l_double t_scale);
-	void draw ();
+	void draw (l_double scale, Point origin);
 };
 
-class Universe
+struct Universe
 {
-private:
 	l_double t_;
 	std::vector<Solid> solids_;
-	const l_double G = 1.67;
-public:
-	Universe (int size);
+	l_double scale_;
+
+	Universe (int size, l_double scale);
 	void add (Solid& s);
 	void calculate (l_double t_scale);
-	void draw();
+	void showtime ();
+	void draw(Point origin, bool showt);
 };
