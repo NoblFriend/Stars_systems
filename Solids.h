@@ -19,18 +19,17 @@ struct Solid
 	Solid();
 	void calculate_v (Vector2 a, l_double t_scale);
 	void calculate_coord (l_double t_scale);
-	void draw (l_double scale, Point origin);
+	void draw (Vector2 scale, Vector2 origin) const;
 };
 
 struct Universe
 {
 	l_double t_;
 	std::vector<Solid> solids_;
-	l_double scale_;
 
-	Universe (int size, l_double scale);
+	Universe (int size);
 	void add (Solid& s);
 	void calculate (l_double t_scale);
-	void showtime ();
-	void draw(Point origin, bool showt);
+	void showtime () const;
+	void draw(Vector2 origin, Vector2 scale, bool showt) const;
 };

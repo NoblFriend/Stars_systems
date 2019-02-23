@@ -30,15 +30,15 @@ void Solid::calculate_coord (l_double t_scale)
 	coord_ = coord_ + v_ * t_scale;
 }
 
-void Solid::draw (l_double scale, Point origin)
+void Solid::draw (Vector2 scale, Vector2 origin) const
 {
-	Graphics::get()->drawPoint(Point{ (double)coord_.x_, (double)coord_.y_ }*scale + origin, r_*scale*1000 + 1, color_);
+	Graphics::drawEllipse(Vector2{ (double)coord_.x_, (double)coord_.y_ }*scale + origin,
+		scale * 1000 * r_ + Vector2{1, 1}, color_);
 }
 
-Universe::Universe (int size, l_double scale)
+Universe::Universe (int size)
 	:	t_(0),
-		solids_(size),
-		scale_(scale)
+		solids_(size)
 {
 	solids_.clear();
 }
@@ -65,20 +65,20 @@ void Universe::calculate (l_double t_scale)
 	t_ += t_scale;
 }
 
-void Universe::showtime ()
+void Universe::showtime () const 
 {
 	char str[50] = "";
 	sprintf_s(str, "%lf", t_/Y);
 	Graphics::get()->drawText ({ 50, 50 }, str, Graphics::get()->colorRGB(255, 255, 255));
 }
 
-void Universe::draw (Point origin, bool showt)
+void Universe::draw (Vector2 origin, Vector2 scale, bool showt) const
 {
 	Graphics::get()->begin();
 	Graphics::get()->clear();
 	for (size_t i = 0; i < solids_.size(); i++)
 	{
-		solids_[i].draw(scale_, origin);
+		solids_[i].draw(scale, origin);
 	}
 	if (showt) showtime();
 	Graphics::get()->end();
