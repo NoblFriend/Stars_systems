@@ -1,5 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "C:\Program Files (x86)\TX\TXLib.h"
 #include "Graphics.h"
+
+time_t StartTime = time(NULL); 
 
 Graphics* Graphics::Graphics__ = NULL;
 
@@ -27,6 +30,18 @@ void Graphics::begin()
 void Graphics::end()
 {
 	txEnd ();
+	if (GetKeyState(VK_CAPITAL) & 1)
+	{
+		static int n = 0;
+		char name[70] = "";
+		time (&StartTime);
+		struct tm * timeinfo = localtime (&StartTime);
+		strftime(name, sizeof(name), "bmp\\Screen_%F_%H-%M-%S_", timeinfo);
+		char fname[sizeof(name)] = "";
+		sprintf_s(fname, "%s%05d.bmp", name, n++);
+		printf("(%s)\n", fname);
+		txSaveImage(fname)asserted;
+	}
 }
 
 void Graphics::clear()
@@ -52,6 +67,7 @@ void Graphics::drawVector (Vector2 v, Vector2 origin, double thickness, COLORREF
 	Graphics::get()->drawLine(origin, v + origin, thickness, color);
 	Graphics::get()->drawPoint(v + origin, 5*thickness, color);
 }
+
 void Graphics::drawPoint(Vector2 p, double thickness, COLORREF color)
 {
 	txSetColor (color, thickness);
