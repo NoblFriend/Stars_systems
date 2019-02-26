@@ -20,19 +20,20 @@ void translate (View* view)
 	}
 	if (GetAsyncKeyState('W'))
 	{
-		view->translate({ 0, (view->scale_ * 2).y_ });
+		view->translate({ 0, 1 });
+		
 	}
 	if (GetAsyncKeyState('S'))
 	{
-		view->translate({ 0, -(view->scale_ * 2).y_ });
+		view->translate({ 0, -1 });
 	}
 	if (GetAsyncKeyState('A'))
 	{
-		view->translate({ (view->scale_ * 2).x_, 0});
+		view->translate({1, 0});
 	}
 	if (GetAsyncKeyState('D'))
 	{
-		view->translate({ -(view->scale_ * 2).x_, 0 });
+		view->translate({ -1, 0 });
 	}
 }
 
@@ -41,7 +42,7 @@ int main()
 {
 	Vector2 windowSize = { GetSystemMetrics(SM_CXSCREEN)*0.85, GetSystemMetrics(SM_CYSCREEN)*0.85 };
 	srand(int(time(NULL)));
-	Graphics::Create(windowSize);
+	Graphics::get()->Create(windowSize);
 	Universe universe (6);
 	Solid sun		({ 0.0,     0.0 }, 1.989E30, 1*SR/20, { 0,       0 }, 0,		         RGB(255, 255,   0), "");
 	Solid mercury	({ 0.38*AU, 0.0 }, 0.055*EM, 2440E3,  { 0, 47.87E3 }, 2*M_PI /(0.241*Y), RGB(255,   0, 120), "");
@@ -61,6 +62,10 @@ int main()
 	{
 		translate(&view);
 		view.draw(universe, true);
+		for (int i = 0; i < universe.solids_.size(); i++)
+		{
+			//universe.solids_[i].draw_v(view.scale_, view.origin_);
+		}
 		double FPS = Graphics::get()->getFPS();
 		double t_scale = (FPS == 0) ? 0 : 1 / (FPS*10);
 		int count = 1000;

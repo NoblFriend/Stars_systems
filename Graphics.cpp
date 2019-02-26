@@ -47,6 +47,11 @@ double Graphics::getFPS()
 	return txGetFPS();
 }
 
+void Graphics::drawVector (Vector2 v, Vector2 origin, double thickness, COLORREF color)
+{
+	Graphics::get()->drawLine(origin, v + origin, thickness, color);
+	Graphics::get()->drawPoint(v + origin, 5*thickness, color);
+}
 void Graphics::drawPoint(Vector2 p, double thickness, COLORREF color)
 {
 	txSetColor (color, thickness);

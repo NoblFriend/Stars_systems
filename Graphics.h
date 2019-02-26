@@ -19,6 +19,7 @@ public:
 	static void clear();
 	static double sleep(int t);
 	static double getFPS ();
+	static void drawVector(Vector2 v, Vector2 origin, double thickness, COLORREF color);
 	static void drawPoint(Vector2 p, double thickness, COLORREF color);
 	static void drawEllipse (Vector2 p, Vector2 r, COLORREF color);
 	static void drawLine(Vector2 p1, Vector2 p2, double thickness, COLORREF color);

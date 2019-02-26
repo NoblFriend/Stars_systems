@@ -1,6 +1,6 @@
 #include "Solids.h"
 
-Solid::Solid (Vector2 coord, l_double m, l_double r, Vector2 v, l_double omega, COLORREF color, const char* name)
+Solid::Solid (Vector2 coord, double m, double r, Vector2 v, double omega, COLORREF color, const char* name)
 	:	coord_(coord),
 		m_(m),
 		r_(r),
@@ -19,21 +19,27 @@ Solid::Solid ()
 		name_("")
 {}
 
-void Solid::calculate_v (Vector2 a, l_double t_scale)
+void Solid::calculate_v (Vector2 a, double t_scale)
 {
 	v_ = v_ + a*t_scale;
 }
 
-void Solid::calculate_coord (l_double t_scale)
+void Solid::calculate_coord (double t_scale)
 {
 
 	coord_ = coord_ + v_ * t_scale;
+}
+
+void Solid::draw_v(Vector2 scale, Vector2 origin) const
+{
+	Graphics::get()->drawVector(v_*scale*1e6, coord_*scale + origin, 1, RGB(255, 255, 255));
 }
 
 void Solid::draw (Vector2 scale, Vector2 origin) const
 {
 	Graphics::drawEllipse(Vector2{ (double)coord_.x_, (double)coord_.y_ }*scale + origin,
 		scale * 1000 * r_ + Vector2{1, 1}, color_);
+	this->draw_v(scale, origin);
 }
 
 Universe::Universe (int size)
@@ -48,15 +54,15 @@ void Universe::add (Solid& s)
 	solids_.push_back(s);
 }
 
-void Universe::calculate (l_double t_scale)
+void Universe::calculate (double t_scale)
 {
 	for (size_t i = 0; i < solids_.size(); i++)
 	{
 		for (size_t j = i+1; j < solids_.size(); j++)
 		{
 			Vector2 r = solids_[j].coord_ - solids_[i].coord_;
-			l_double len = ~r;
-			l_double len3 = len * len * len;
+			double len = ~r;
+			double len3 = len * len * len;
 			solids_[i].calculate_v(r*(global_consts::G*solids_[j].m_ / len3), t_scale);
 			solids_[j].calculate_v(r*(-global_consts::G*solids_[i].m_ / len3), t_scale);
 		}
