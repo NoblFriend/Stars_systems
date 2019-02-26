@@ -32,14 +32,13 @@ void Solid::calculate_coord (double t_scale)
 
 void Solid::draw_v(Vector2 scale, Vector2 origin) const
 {
-	Graphics::get()->drawVector(v_*scale*1e6, coord_*scale + origin, 1, RGB(255, 255, 255));
+	Graphics::get()->drawVector(v_*scale*1e6, coord_*scale + origin, 1, color_);
 }
 
 void Solid::draw (Vector2 scale, Vector2 origin) const
 {
-	Graphics::drawEllipse(Vector2{ (double)coord_.x_, (double)coord_.y_ }*scale + origin,
-		scale * 1000 * r_ + Vector2{1, 1}, color_);
-	this->draw_v(scale, origin);
+	Graphics::drawEllipse(coord_*scale + origin,scale * 1000 * r_ + Vector2{1, 1}, color_);
+	//this->draw_v(scale, origin);
 }
 
 Universe::Universe (int size)

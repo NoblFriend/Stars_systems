@@ -78,7 +78,7 @@ void Graphics::drawEllipse(Vector2 p, Vector2 r, COLORREF color)
 {
 	txSetColor (color);
 	txSetFillColor (color);
-	txEllipse(p.x_ - r.x_, p.y_ - r.y_, p.x_ + r.x_, p.y_ + r.y_);
+	txEllipse(p.x_ - r.x_, txGetExtentY() - (p.y_ - r.y_), p.x_ + r.x_, txGetExtentY() - (p.y_ + r.y_));
 }
 
 void DrawLine (double x1, double y1, double x2, double y2)

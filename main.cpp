@@ -62,10 +62,6 @@ int main()
 	{
 		translate(&view);
 		view.draw(universe, true);
-		for (size_t i = 0; i < universe.solids_.size(); i++)
-		{
-			//universe.solids_[i].draw_v(view.scale_, view.origin_);
-		}
 		double FPS = Graphics::get()->getFPS();
 		double t_scale = (FPS == 0) ? 0 : 1 / (FPS * 10);
 		int count = 1000;
