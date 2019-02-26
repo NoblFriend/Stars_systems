@@ -1,20 +1,7 @@
 #include "C:\Program Files (x86)\TX\TXLib.h"
 #include "Graphics.h"
 
-Graphics* Graphics::Graphics_ = NULL;
-
-bool Point::isin (std::pair<Point, Point> range)
-{
- if (((x >= range.first.x && x <= range.second.x) || (x <= range.first.x && x >= range.second.x)) &&
-     ((y >= range.first.y && y <= range.second.y) || (y <= range.first.y && y >= range.second.y)))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
+Graphics* Graphics::Graphics__ = NULL;
 
 Graphics::Graphics ()
 {
@@ -22,14 +9,14 @@ Graphics::Graphics ()
 
 Graphics * Graphics::get()
 {
-	return Graphics_;
+	return Graphics__;
 }
 
-void Graphics::Create(Point p)
+void Graphics::Create(Vector2 p)
 {
 	static Graphics graphics;
-	Graphics_ = &graphics;
-	txCreateWindow ( p.x, p.y, true );
+	Graphics__ = &graphics;
+	txCreateWindow ( p.x_, p.y_, true );
 }
 
 void Graphics::begin()
@@ -60,46 +47,58 @@ double Graphics::getFPS()
 	return txGetFPS();
 }
 
-void Graphics::drawPoint(Point p, double thickness, COLORREF color)
+void Graphics::drawVector (Vector2 v, Vector2 origin, double thickness, COLORREF color)
+{
+	Graphics::get()->drawLine(origin, v + origin, thickness, color);
+	Graphics::get()->drawPoint(v + origin, 5*thickness, color);
+}
+void Graphics::drawPoint(Vector2 p, double thickness, COLORREF color)
 {
 	txSetColor (color, thickness);
-	txCircle (p.x, txGetExtentY() - p.y, 1);
+	txCircle (p.x_, txGetExtentY() - p.y_, 1);
+}
+
+void Graphics::drawEllipse(Vector2 p, Vector2 r, COLORREF color)
+{
+	txSetColor (color);
+	txSetFillColor (color);
+	txEllipse(p.x_ - r.x_, p.y_ - r.y_, p.x_ + r.x_, p.y_ + r.y_);
 }
 
 void DrawLine (double x1, double y1, double x2, double y2)
 {
 	txSetColor (TX_WHITE, 4);
-	std::cout << " p1.x = " << x1;
-	std::cout << " p1.y = " << y1;
-	std::cout << " p2.x = " << x2;
-	std::cout << " p2.y = " << y2 << '\n';
+	std::cout << " p1.x_ = " << x1;
+	std::cout << " p1.y_ = " << y1;
+	std::cout << " p2.x_ = " << x2;
+	std::cout << " p2.y_ = " << y2 << '\n';
 	txLine (x1, y1, x2, y2);
 	txCircle (x1, y1, 10);
 	txCircle (x2, y2, 10);
 }
 
-void Graphics::drawLine(Point p1, Point p2, double thickness, COLORREF color)
+void Graphics::drawLine(Vector2 p1, Vector2 p2, double thickness, COLORREF color)
 {
 
 	txSetColor (color, thickness);
 
-	txLine (p1.x, txGetExtentY() - p1.y, p2.x, txGetExtentY() - p2.y);
+	txLine (p1.x_, txGetExtentY() - p1.y_, p2.x_, txGetExtentY() - p2.y_);
 }
 
-void Graphics::drawRectangle(Point p1, Point p2, double thickness, COLORREF color)
+void Graphics::drawRectangle(Vector2 p1, Vector2 p2, double thickness, COLORREF color)
 {
 	txSetColor (color, thickness);
 	int a = txGetExtentY();
-	txLine (p1.x, a - p1.y, p1.x, a - p2.y);
-	txLine (p1.x, a - p2.y, p2.x, a - p2.y);
-	txLine (p2.x, a - p2.y, p2.x, a - p1.y);
-	txLine (p2.x, a - p1.y, p1.x, a - p1.y);
+	txLine (p1.x_, a - p1.y_, p1.x_, a - p2.y_);
+	txLine (p1.x_, a - p2.y_, p2.x_, a - p2.y_);
+	txLine (p2.x_, a - p2.y_, p2.x_, a - p1.y_);
+	txLine (p2.x_, a - p1.y_, p1.x_, a - p1.y_);
 }
 
-void Graphics::drawText(Point p, std::string text, COLORREF color)
+void Graphics::drawText(Vector2 p, std::string text, COLORREF color)
 {
 	txSetColor (color);
-	txTextOut(p.x, txGetExtentY() - p.y, text.c_str());
+	txTextOut(p.x_, txGetExtentY() - p.y_, text.c_str());
 }
 
 COLORREF Graphics::lowerBrightness (COLORREF color, double k)
@@ -118,42 +117,3 @@ Graphics::~Graphics()
 }
 
 
-Point operator+(const Point & p1, const Point & p2)
-{
-	Point p;
-	p.x = p1.x + p2.x;
-	p.y = p1.y + p2.y;
-	return p;
-}
-
-Point operator-(const Point & p1, const Point & p2)
-{
-	Point p;
-	p.x = p1.x - p2.x;
-	p.y = p1.y - p2.y;
-	return p;
-}
-
-Point operator/(const Point & p1, const Point & p2)
-{
-	Point p;
-	p.x = p1.x / p2.x;
-	p.y = p1.y / p2.y;
-	return p;
-}
-
-Point operator*(const Point & p1, const Point & p2)
-{
-	Point p;
-	p.x = p1.x * p2.x;
-	p.y = p1.y * p2.y;
-	return p;
-}
-
-Point operator*(const Point & p1, double d)
-{
-	Point p;
-	p.x = p1.x*d;
-	p.y = p1.y*d;
-	return p;
-}
